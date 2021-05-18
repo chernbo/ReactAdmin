@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div id="text"></div>
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script src="js/babel.min.js"></script>
+    <script type="text/babel">
+    //#region
+        /*
+            高阶函数: 满足其中之一 
+                1、若A函数,接收的参数是一个函数，那么A就可以称为高阶函数。
+                2、若A函数，调用的返回值依然是一个函数，那么A就可以称之为高阶函数
+            函数的柯里化：
+                通过函数调用继续返回函数的方式,实现多次接收参数最后统一处理的函数编码形式。
+        */
+    //#endregion
+    class Demo extends React.Component{
+        state ={
+            username:null,
+            password:null,
+            data:0
+        }
+
+        fun = setInterval(()=>{
+            console.log(`data之后${this.state.data}`)
+            this.setState(
+                (state)=>{
+                    data:state.data+1
+                }
+            )
+            console.log(`data之后${this.state.data}`)
+        },1000)
+        
+        handleSubmit = (event)=>{
+            event.preventDefault() //阻止表单提交,防止页面提交时强制刷新页面抖动
+            const {username,password} = this.state
+            alert(`你的用户名是:${username},你的密码是${password}`)
+        }
+
+        saveFromData =(dataType,event)=>{
+            this.setState({[dataType]:event.target.value})
+        }
+
+        render(){
+            fun()
+            return (
+                <form onSubmit ={this.handleSubmit}>
+                {/*将直接定义内联函数体给onChange,此时就能拿到内置形参event,内联函数调用saveFromData,传入event */}
+                用户名:<input onChange={event=> this.saveFromData("username",event)} type="text" name="username"/>
+                密码:<input  onChange={event=> this.saveFromData("password",event)}  type="password" name="password"/>
+                <button>登录</button>  
+                </form>
+            )
+        }
+    }
+    // 挂载到页面容器上
+    ReactDOM.render(<Demo/>,document.getElementById("text"));
+    </script>
+
+</body>
+</html>
